@@ -1,0 +1,25 @@
+public class MyActivity extends Activity {
+  private ScheduledExecutorService scheduleTaskExecutor;
+
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    scheduleTaskExecutor= Executors.newScheduledThreadPool(5);
+
+    // This schedule a task to run every 10 minutes:
+    scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+      public void run() {
+        // Parsing RSS feed:
+        myFeedParser.doSomething();
+
+        // If you need update UI, simply do this:
+        runOnUiThread(new Runnable() {
+          public void run() {
+            // update your UI component here.
+            myTextView.setText("refreshed");
+          }
+        });
+      }
+    }, 0, 10, TimeUnit.MINUTES);
+  } // end of onCreate()
+}
+http://stackoverflow.com/questions/23774720/which-is-better-scheduledexecutorservice-or-alarmmanager-in-android
